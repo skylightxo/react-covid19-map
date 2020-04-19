@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import world from "./world.svg";
+
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [loading, setLoading] = useState(true);
+  const getInfo = async () => {
+    try {
+      const response = await fetch("https://api.covid19api.com/summary", {
+        method: "GET",
+      });
+      if (response.ok) {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return response;
+  };
+  getInfo();
+  const colorMap = function(data){
+    data.
+  }
+  return loading ? "Loading" : <img src={world} alt="world" />;
 }
 
 export default App;
