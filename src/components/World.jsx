@@ -1,8 +1,17 @@
-import * as React from "react"
+import React, {useEffect, useRef, useImperativeHandle, forwardRef} from "react"
 
-function SvgComponent(props) {
+function SvgComponent(props, ref) {
+  const worldMap = useRef();
+  useImperativeHandle(ref, () => ({
+    getCountryEl(countryCode) {
+      return worldMap.current.querySelector(`#prefix__${countryCode}`);
+    }
+  }));
+  // useEffect(()=>{
+  //   }, [])
+  
   return (
-    <svg
+    <svg ref={worldMap}
       viewBox="0 0 2000 1001"
       height={1001}
       width={2000}
@@ -17,7 +26,7 @@ function SvgComponent(props) {
           {"path{fill-rule:evenodd}"}
         </style>
       </defs>
-      <path
+      <path 
         id="prefix__AF"
         data-name="Afghanistan"
         data-id="AF"
@@ -25,7 +34,7 @@ function SvgComponent(props) {
         fill="#f2f2f2"
         fillRule="evenodd"
       />
-      <path
+      <path 
         id="prefix__AO"
         data-name="Angola"
         data-id="AO"
@@ -33,7 +42,7 @@ function SvgComponent(props) {
         fill="#f2f2f2"
         fillRule="evenodd"
       />
-      <path
+      <path 
         id="prefix__AL"
         data-name="Albania"
         data-id="AL"
@@ -1709,4 +1718,4 @@ function SvgComponent(props) {
   )
 }
 
-export default SvgComponent
+export default forwardRef(SvgComponent)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import World from "./components/World";
 
 import "./App.css";
@@ -6,6 +6,7 @@ import "./App.css";
 function App() {
   const [loading, setLoading] = useState(true);
   const [globalData, setGlobalData] = useState();
+  const worldMap = useRef();
   const getInfo = async () => {
     try {
       const response = await fetch("https://api.covid19api.com/summary", {
@@ -14,7 +15,6 @@ function App() {
       const result = await response.json();
       if (response.ok) {
         setLoading(false);
-        console.log(result);
         setGlobalData(result.Global.TotalConfirmed);
         return response;
       }
@@ -24,11 +24,15 @@ function App() {
   };
   useEffect(()=>{
     getInfo();
+    setTimeout(()=>{
+      worldMap.current.getCountryEl('UA').style.fill = 'red';
+    }, 500)
   }, [])
+  
   return loading ? "Loading" : (
   <div className="app">
     <p>{globalData}</p>
-    <World className="world"/>
+    <World ref={worldMap} className="world"/>
   </div>)
 }
 
