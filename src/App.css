@@ -1,4 +1,42 @@
-.world{
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+body {
+  font-family: "Oswald", sans-serif;
+}
+
+.world {
   width: 100%;
   height: 100%;
+}
+
+.global-sign {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #2f4f4f;
+  font-size: 1.2rem;
+  border: 1px solid #353535;
+}
+
+.global-sign__info {
+  margin: 0 25px;
+  color: #ffd700;
+}
+
+.global-sign__info__value {
+  margin: 0 25px;
+  color: #ff6347;
+}
+
+.heading {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+path {
+  transition: fill 1s ease;
 }
