@@ -17,7 +17,7 @@ body {
   padding: 10px;
   background: #2f4f4f;
   font-size: 1.2rem;
-  border: 1px solid #353535;
+  border: 2px solid #353535;
 }
 
 .global-sign__info {
@@ -26,7 +26,7 @@ body {
 }
 
 .global-sign__info__value {
-  margin: 0 25px;
+  margin: 0 25px 0 10px;
   color: #ff6347;
 }
 
@@ -35,6 +35,8 @@ body {
   margin-bottom: 20px;
   font-size: 2.5rem;
   text-align: center;
+  color: #ffd700;
+  text-shadow: 2px 2px black, -2px 2px black, 2px -2px black, -2px -2px black;
 }
 
 path {

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import WorldFacade from "./components/WorldFacade";
 import GlobalSign from "./components/GlobalSign";
 import "./App.css";
+import MapLegend from "./components/MapLegend";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [globalData, setGlobalData] = useState();
+  const [countriesData, setCountriesData] = useState();
   const getInfo = async () => {
     try {
       const response = await fetch("https://api.covid19api.com/summary", {
@@ -13,9 +15,8 @@ function App() {
       });
       const result = await response.json();
       if (response.ok) {
+        setCountriesData(result.Countries);
         setGlobalData(result.Global);
-        console.log(result);
-        console.log(globalData);
         return result;
       }
     } catch (error) {
@@ -24,29 +25,35 @@ function App() {
       setLoading(false);
     }
   };
+
+  const sortCountriesByField = (countries, func) => {
+    let countriesCopy = countries;
+    countries.sort(func);
+    return countriesCopy;
+  };
+
+  const onWorldInit = (worldRef) => {
+    sortCountriesByField(countriesData, function (a, b) {
+      return a.TotalConfirmed - b.TotalConfirmed;
+      // return a.TotalRecovered - b.TotalRecovered;
+    });
+    console.log(countriesData);
+
+    countriesData.forEach((country, index) => {
+      const countryEl = worldRef.getCountryEl(country.CountryCode);
+      let gap = (index / 24.7) * 0.1;
+      if (!countryEl) {
+        console.warn(`Country with code '${country.CountryCode}' wasn't found`);
+        return;
+      }
+      countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
+      // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
+    });
+  };
+
   useEffect(() => {
     getInfo();
   }, []);
-
-  const onWorldInit = (worldRef) => {
-    getInfo().then((result) => {
-      console.log(result);
-
-      const countries = result.Countries.slice(0, 300);
-
-      countries.forEach((country, index) => {
-        const countryEl = worldRef.getCountryEl(country.CountryCode);
-        const gap = (index + 1) / 200;
-        if (!countryEl) {
-          console.warn(
-            `Country with code '${country.CountryCode}' wasn't found`
-          );
-          return;
-        }
-        countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
-      });
-    });
-  };
 
   return loading ? (
     "Loading"
@@ -55,6 +62,7 @@ function App() {
       <h1 className="heading">COVID-19 MAP</h1>
       <GlobalSign info={globalData} />
       <WorldFacade className="world" onWorldInit={onWorldInit} />
+      {/* <MapLegend data={countriesData} /> */}
     </div>
   );
 }

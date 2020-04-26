@@ -1,8 +1,14 @@
 import React from "react";
 
 export default function GlobalSign({ info }) {
-  console.log(info);
-  const { TotalConfirmed, NewConfirmed, TotalDeaths, NewDeaths } = info;
+  const {
+    TotalConfirmed,
+    NewConfirmed,
+    TotalDeaths,
+    NewDeaths,
+    TotalRecovered,
+    NewRecovered,
+  } = info;
 
   return (
     <div className="global-sign">
@@ -21,6 +27,14 @@ export default function GlobalSign({ info }) {
       <p className="global-sign__info">
         New Deaths:
         <span className="global-sign__info__value">{NewDeaths}</span>
+      </p>
+      <p className="global-sign__info">
+        Total Recovered:
+        <span className="global-sign__info__value">{TotalRecovered}</span>
+      </p>
+      <p className="global-sign__info">
+        New Recovered:
+        <span className="global-sign__info__value">{NewRecovered}</span>
       </p>
     </div>
   );
