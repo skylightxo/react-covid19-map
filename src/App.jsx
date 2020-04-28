@@ -35,7 +35,6 @@ function App() {
   const onWorldInit = (worldRef) => {
     sortCountriesByField(countriesData, function (a, b) {
       return a.TotalConfirmed - b.TotalConfirmed;
-      // return a.TotalRecovered - b.TotalRecovered;
     });
     console.log(countriesData);
 
@@ -46,7 +45,11 @@ function App() {
         console.warn(`Country with code '${country.CountryCode}' wasn't found`);
         return;
       }
-      countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
+      if (country.TotalConfirmed === 0) {
+        countryEl.style.fill = `rgba(207, 0, 15, 0)`;
+      } else {
+        countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
+      }
       // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
     });
   };
@@ -62,7 +65,7 @@ function App() {
       <h1 className="heading">COVID-19 MAP</h1>
       <GlobalSign info={globalData} />
       <WorldFacade className="world" onWorldInit={onWorldInit} />
-      {/* <MapLegend data={countriesData} /> */}
+      <MapLegend data={countriesData} />
     </div>
   );
 }

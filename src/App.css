@@ -42,3 +42,21 @@ body {
 path {
   transition: fill 1s ease;
 }
+
+.map-legend {
+  display: block;
+  position: absolute;
+  top: 0;
+  margin-top: 42.2%;
+  width: 250px;
+  height: auto;
+  background: rgb(210, 215, 211);
+  padding: 1rem;
+  border-top: 1px solid #2f4f4f;
+  border-right: 1px solid #2f4f4f;
+  border-bottom: 1px solid #2f4f4f;
+}
+
+.map-legend__info {
+  margin-bottom: 10px;
+}
