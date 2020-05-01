@@ -5,10 +5,8 @@ function WorldFacade({ onWorldInit, ...otherProps }) {
   const worldRef = useRef();
 
   useEffect(() => {
-    setTimeout(() => {
-      onWorldInit && onWorldInit(worldRef.current);
-    }, 500);
-  }, []);
+    onWorldInit && onWorldInit(worldRef.current);
+  }, [onWorldInit]);
 
   return <World ref={worldRef} {...otherProps} />;
 }

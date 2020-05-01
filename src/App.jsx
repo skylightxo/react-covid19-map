@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import WorldFacade from "./components/WorldFacade";
 import GlobalSign from "./components/GlobalSign";
-import "./App.css";
 import MapLegend from "./components/MapLegend";
+import sortCountriesByField from "./functions/sortCountriesByField";
+import cutOffHealthyCountries from "./functions/cutOffHealthyCountries";
+import "./App.css";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -26,33 +28,31 @@ function App() {
     }
   };
 
-  const sortCountriesByField = (countries, func) => {
-    let countriesCopy = countries;
-    countries.sort(func);
-    return countriesCopy;
-  };
+  const onWorldInit = useCallback(
+    (worldRef) => {
+      sortCountriesByField(countriesData, function (a, b) {
+        return a.TotalConfirmed - b.TotalConfirmed;
+      });
 
-  const onWorldInit = (worldRef) => {
-    sortCountriesByField(countriesData, function (a, b) {
-      return a.TotalConfirmed - b.TotalConfirmed;
-    });
-    console.log(countriesData);
+      const modifiedCountriesList = cutOffHealthyCountries(countriesData);
+      console.log(modifiedCountriesList);
 
-    countriesData.forEach((country, index) => {
-      const countryEl = worldRef.getCountryEl(country.CountryCode);
-      let gap = (index / 24.7) * 0.1;
-      if (!countryEl) {
-        console.warn(`Country with code '${country.CountryCode}' wasn't found`);
-        return;
-      }
-      if (country.TotalConfirmed === 0) {
-        countryEl.style.fill = `rgba(207, 0, 15, 0)`;
-      } else {
+      modifiedCountriesList.forEach((country, index) => {
+        const countryEl = worldRef.getCountryEl(country.CountryCode);
+        let gap = (index / 17.8) * 0.1;
+        if (!countryEl) {
+          console.warn(
+            `Country with code '${country.CountryCode}' wasn't found`
+          );
+          return;
+        }
         countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
-      }
-      // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
-    });
-  };
+
+        // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
+      });
+    },
+    [countriesData]
+  );
 
   useEffect(() => {
     getInfo();
