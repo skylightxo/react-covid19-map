@@ -1,24 +1,45 @@
 import React from "react";
-import sortCountriesByField from "../functions/sortCountriesByField";
-import cutOffHealthyCountries from "../functions/cutOffHealthyCountries";
 
 export default function MapLegend({ data }) {
-  sortCountriesByField(data, function (a, b) {
-    return a.TotalConfirmed - b.TotalConfirmed;
-  });
+  console.log(data);
+  const gap = Math.ceil(data.length / 10);
+  const leftoverCountriesNum = ((data.length / 10) % 1) * 10;
+  console.log(leftoverCountriesNum);
 
-  const modifiedCountryList = cutOffHealthyCountries(data);
-  console.log(modifiedCountryList);
+  console.log(gap);
+
+  const legendData = [];
+  data.forEach((country, index) => {
+    if ((index + 1) % gap === 0) {
+      legendData.push(data[index - gap + 1]);
+      legendData.push(data[index]);
+    }
+    index++;
+  });
+  legendData.push(data[data.length - leftoverCountriesNum]);
+  legendData.push(data[data.length - 1]);
+
+  console.log(legendData[14]);
 
   return (
     <div className="map-legend">
-      <div className="map-legend__info">
-        <div className="color-box"></div>
-        <span>
-          {modifiedCountryList[18].TotalConfirmed}-
-          {modifiedCountryList[0].TotalConfirmed}
-        </span>
-      </div>
+      {legendData.map((country, index) => {
+        return index % 2 === 0 ? (
+          <div key={"group_" + index} className="map-legend__info">
+            <div key={"div_" + index} className={`color-box_${index}`}></div>
+            {console.log(index)}
+
+            <span key={"num_" + index}>
+              {legendData[index].TotalConfirmed}
+              {legendData[index + 1]
+                ? " - " + legendData[index + 1].TotalConfirmed
+                : ""}
+            </span>
+          </div>
+        ) : (
+          ""
+        );
+      })}
     </div>
   );
 }

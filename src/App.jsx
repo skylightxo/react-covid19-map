@@ -10,6 +10,9 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [globalData, setGlobalData] = useState();
   const [countriesData, setCountriesData] = useState();
+  const [modifiedCountriesList, setModifiedCountriesList] = useState();
+  const [isWorldInit, setIsWorldInit] = useState(false);
+
   const getInfo = async () => {
     try {
       const response = await fetch("https://api.covid19api.com/summary", {
@@ -30,16 +33,19 @@ function App() {
 
   const onWorldInit = useCallback(
     (worldRef) => {
-      sortCountriesByField(countriesData, function (a, b) {
+      const sortedCountriesList = sortCountriesByField(countriesData, function (
+        a,
+        b
+      ) {
         return a.TotalConfirmed - b.TotalConfirmed;
       });
 
-      const modifiedCountriesList = cutOffHealthyCountries(countriesData);
-      console.log(modifiedCountriesList);
+      const modifiedCountriesList = cutOffHealthyCountries(sortedCountriesList);
+      setModifiedCountriesList(modifiedCountriesList);
 
       modifiedCountriesList.forEach((country, index) => {
         const countryEl = worldRef.getCountryEl(country.CountryCode);
-        let gap = (index / 17.8) * 0.1;
+        let gap = (index / (modifiedCountriesList.length / 10)) * 0.1;
         if (!countryEl) {
           console.warn(
             `Country with code '${country.CountryCode}' wasn't found`
@@ -47,9 +53,9 @@ function App() {
           return;
         }
         countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
-
         // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
       });
+      setIsWorldInit(true);
     },
     [countriesData]
   );
@@ -65,7 +71,7 @@ function App() {
       <h1 className="heading">COVID-19 MAP</h1>
       <GlobalSign info={globalData} />
       <WorldFacade className="world" onWorldInit={onWorldInit} />
-      <MapLegend data={countriesData} />
+      {modifiedCountriesList && <MapLegend data={modifiedCountriesList} />}
     </div>
   );
 }
