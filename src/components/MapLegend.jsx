@@ -1,12 +1,8 @@
 import React from "react";
 
 export default function MapLegend({ data }) {
-  console.log(data);
   const gap = Math.ceil(data.length / 10);
   const leftoverCountriesNum = ((data.length / 10) % 1) * 10;
-  console.log(leftoverCountriesNum);
-
-  console.log(gap);
 
   const legendData = [];
   data.forEach((country, index) => {
@@ -19,15 +15,19 @@ export default function MapLegend({ data }) {
   legendData.push(data[data.length - leftoverCountriesNum]);
   legendData.push(data[data.length - 1]);
 
-  console.log(legendData[14]);
-
   return (
     <div className="map-legend">
+      <div className="map-legend__info">
+        <div className="color-box"></div>
+        <span>0</span>
+      </div>
       {legendData.map((country, index) => {
         return index % 2 === 0 ? (
           <div key={"group_" + index} className="map-legend__info">
-            <div key={"div_" + index} className={`color-box_${index}`}></div>
-            {console.log(index)}
+            <div
+              key={"div_" + index}
+              className={`color-box color-box_${index / 2}`}
+            ></div>
 
             <span key={"num_" + index}>
               {legendData[index].TotalConfirmed}

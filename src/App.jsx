@@ -68,8 +68,8 @@ function App() {
     "Loading"
   ) : (
     <div className="app">
-      <h1 className="heading">COVID-19 MAP</h1>
       <GlobalSign info={globalData} />
+      <h1 className="heading">COVID-19 MAP</h1>
       <WorldFacade className="world" onWorldInit={onWorldInit} />
       {modifiedCountriesList && <MapLegend data={modifiedCountriesList} />}
     </div>
