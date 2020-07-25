@@ -53,6 +53,10 @@ function App() {
           return;
         }
         countryEl.style.fill = `rgba(207, 0, 15, ${gap})`;
+        countryEl.setAttribute(
+          "data-tip",
+          `${countryEl.getAttribute("data-tip")}: ${country.TotalConfirmed}`
+        );
         // countryEl.style.fill = `rgba(0, 177, 106, ${gap})`;
       });
       setIsWorldInit(true);
